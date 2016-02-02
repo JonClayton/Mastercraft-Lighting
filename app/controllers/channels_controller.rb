@@ -19,7 +19,19 @@ class ChannelsController < ApplicationController
 
   def edit
     @channel
-    render :_edit_form
+    if request.xhr?
+      p "*" * 40
+      p render_to_string('_edit_form', :layout => false, :locals => { :channel => @channel })
+      p "*" * 40
+      render :json => { :attachmentPartial =>
+                        render_to_string('_edit_form',
+                        :layout => false, :locals => { :channel => @channel,
+                        :production_id => params[:production_id],
+                        :id => @channel.id }),
+                        :item_id => @channel.id }
+    else
+      #do something else...
+    end
   end
 
   def show
@@ -27,9 +39,9 @@ class ChannelsController < ApplicationController
   end
 
   def update
-    p "*" * 40
+    p "-" * 40
     p params.inspect
-    p "*" * 40
+    p "-" * 40
   end
 
 

@@ -30,6 +30,7 @@ var toggleMenus = function(){
 var bindListeners = function(){
   deleteButtonListener();
   editButtonListener();
+  editInputButtonListener();
 };
 
 //-------------------------------------------------
@@ -57,6 +58,16 @@ var editButtonListener = function(){
     editRow(this);
   });
 };
+
+var editInputButtonListener = function(){
+  $('#channel-hookup').on("submit", ".edit-input-btn", function(e){
+    e.preventDefault();
+    var form = $(this).serialize();
+    console.log("edit input button clicked: " + form);
+    debugger;
+    updateRow(formData);
+  });
+};
 //-------------------------------------------------
 // Functions
 //-------------------------------------------------
@@ -80,10 +91,11 @@ var editRow = function(path){
   $.ajax({
     method: "GET",
     url: path,
-    dataType: 'json'
   }).done(function(response){
+    console.log("editing item #:" + response.item_id +
+                " with " + response.attachmentPartial);
+    $('#CH-Row' + response.item_id).html(response.attachmentPartial);
     console.log("editing item:" );
-
   }).fail(function(response){
     console.log("ajax edit call failed: " + response);
   });
@@ -91,6 +103,13 @@ var editRow = function(path){
 
 var getConfirmation = function(){
   return confirm("This will permanently delete this data from your show. Continue?");
+};
+
+var updateRow = function(formData){
+  // $.ajax({
+  //   method: "PATCH",
+  //   url:
+  // })
 };
 
 //-------------------------------------------------
